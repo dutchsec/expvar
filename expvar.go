@@ -99,7 +99,16 @@ func (v *Map) String() string {
 		if !first {
 			fmt.Fprintf(&b, ", ")
 		}
-		fmt.Fprintf(&b, "%q: %v", kv.Key, kv.Value)
+
+		val, err := json.Marshal(kv.Value)
+		if err != nil {
+			return
+		}
+
+		fmt.Fprintf(&b, "%q: ", kv.Key)
+
+		b.Write(val)
+
 		first = false
 	})
 	fmt.Fprintf(&b, "}")
