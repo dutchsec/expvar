@@ -52,6 +52,10 @@ func (v *Int) Set(value int64) {
 	atomic.StoreInt64(&v.i, value)
 }
 
+func (v *Int) MarshalJSON() ([]byte, error) {
+	return json.Marshal(v.Value())
+}
+
 // Float is a 64-bit float variable that satisfies the Var interface.
 type Float struct {
 	f uint64
@@ -82,6 +86,10 @@ func (v *Float) Add(delta float64) {
 // Set sets v to value.
 func (v *Float) Set(value float64) {
 	atomic.StoreUint64(&v.f, math.Float64bits(value))
+}
+
+func (v *Float) MarshalJSON() ([]byte, error) {
+	return json.Marshal(v.Value())
 }
 
 // Map is a string-to-Var map variable that satisfies the Var interface.
@@ -238,6 +246,10 @@ func (v *String) String() string {
 
 func (v *String) Set(value string) {
 	v.s.Store(value)
+}
+
+func (v *String) MarshalJSON() ([]byte, error) {
+	return json.Marshal(v.Value())
 }
 
 var Default = &Bucket{}
