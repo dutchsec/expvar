@@ -413,8 +413,14 @@ func memstats() interface{} {
 	return *stats
 }
 
+const defaultEndpoint = "/debug/vars"
+
 func init() {
-	http.HandleFunc("/debug/vars", expvarHandler)
+	ep := os.Getenv("EXPVAR_ENDPOINT")
+	if ep == "" {
+		ep = defaultEndpoint
+	}
+	http.HandleFunc(ep, expvarHandler)
 	Publish("cmdline", Func(cmdline))
 	Publish("memstats", Func(memstats))
 }
